@@ -111,9 +111,9 @@ ax.set_ylim(-0.5, hdu[0].data.shape[0]/binning + 0.5)
 ra = ax.coords[0]
 dec = ax.coords[1]
 
-
-ra.set_major_formatter('d.dd')
-dec.set_major_formatter('d.dd')
+if binning == 1:
+    ra.set_major_formatter('d.dd')
+    dec.set_major_formatter('d.dd')
 
 ax.set_xlabel('RA',fontsize=15, rotation=270)
 ax.set_ylabel('DEC',fontsize=15)
@@ -145,6 +145,8 @@ ax.imshow(img, origin='lower')
 # Overlay the contours
 # Open contour files and select the levels
 if input_cont != 'None':
+#    import analysis_funcs as af
+#    af.set_contour(input_cont,ax, wcs=wcs, alpha=1, lw=25, color="white")
     cont_orig = open(input_cont)
     lines = cont_orig.readlines()
     lines=np.array(lines)
@@ -162,7 +164,7 @@ if input_cont != 'None':
         c = ac.SkyCoord(ra=x, dec=y)
 
         ra_pix, dec_pix = awu.skycoord_to_pixel(c, wcs)
-        plt.plot(ra_pix, dec_pix, '-', color=color, lw=lw)
+        ax.plot(ra_pix/binning, dec_pix/binning, '-', color=color, lw=lw)
     os.remove('./tmp_con.con')
 
 #pixel = 7.311111523045E-05 # degrees

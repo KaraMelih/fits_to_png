@@ -47,6 +47,10 @@ EXAMPLES:
 -         python3 create_subimages -r r_img.fits -g g_img.fits -b i_img.fits -o myimg -reg myreg.reg -con ds9.con
           The given contour file is overlaid on the adjusted output image.
 
+-         python3 create_subimages.py -r r_imgs.fits -g g_imgs.fits -b i_imgs.fits -o myimg2 -con ../DECam_all/DECam_v3/codes/data/3Gsm_6lvl9sm.con 
+                  -reg ../DECam_all/DECam_v3/codes/A3391_ellipticals_test.reg -bin 5
+          create the whole image, overlay both regions and contour file. Create image by bining every 5 pixels
+
 AUTHOR:
 Melih Kara (karamel@astro.uni-bonn)
 
@@ -67,6 +71,8 @@ parser.add_argument('-reg2', '--region_file2', nargs=1, default=['None'],require
                     type=str, help='2nd region file (OPTIONAL) \n ex: -reg2 ds9_extra.reg')
 parser.add_argument('-con', '--contour_file', nargs=1, required=False, default=['None'],
                     type=str, help='contour file\n ex: -con ds9.con')
+parser.add_argument('-lw', '--line_width', nargs=1, default=[1],
+                    type=float, help='contour line width (OPTIONAL) \n ex: -lw 2')
 parser.add_argument('-bin', '--binning', nargs=1, default=[1],
                     type=int, help='Choose a binning, default is 1. For large data resolution \
                                     can be decreased by binning the data (OPTIONAL) \n ex: -bin 5')
@@ -86,10 +92,7 @@ reg2 = args.region_file2[0]
 input_cont = args.contour_file[0]
 binning = args.binning[0]
 xray = args.xray[0]
-
-
-# Initially consider to create an image from the all area of the fits. And overlay nothing
-allimage = True ; regoverlay = False
+lw = args.line_width[0]
 
 def make_img(img1,img2,img3,outputname, overlay,bins=1):
     """
@@ -106,35 +109,18 @@ def make_img(img1,img2,img3,outputname, overlay,bins=1):
     # call another python script to adjust the image
     if overlay:
         if reg2 == 'None':
-            sp.call(["python3","adjust_image.py","-img",f"{outputname}.tif","-f",f"{img1}","-o", f"adjusted_{outputname}.tif",\
-                     "-reg", f"{regionfile}", "-bin",f"{bins}"])
+            sp.call(["python3","adjust_image.py","-img",f"{outputname}.tif","-f",f"{img1}","-o", f"{outputname}_adj.tif",\
+                     "-reg", f"{regionfile}", "-bin",f"{bins}","-con",f"{input_cont}",\
+                     "-lw",f"{lw}"])
         else:
-            sp.call(["python3","adjust_image.py","-img",f"{outputname}.tif","-f",f"{img1}","-o", f"adjusted_{outputname}.tif",\
-                     "-reg", f"{regionfile}", "-bin",f"{bins}","-reg2", f"{reg2}" ])
+            sp.call(["python3","adjust_image.py","-img",f"{outputname}.tif","-f",f"{img1}","-o", f"{outputname}_adj.tif",\
+                     "-reg", f"{regionfile}", "-bin",f"{bins}","-reg2", f"{reg2}","-con",f"{input_cont}" ,\
+                     "-lw",f"{lw}"])
     else:
-        sp.call(["python3","adjust_image.py","-img", f"{outputname}.tif","-f",f"{img1}","-o", f"adjusted_{outputname}.tif", "-bin",f"{bins}"])
+        sp.call(["python3","adjust_image.py","-img", f"{outputname}.tif","-f",f"{img1}","-o", f"{outputname}_adj.tif", "-bin",f"{bins}","-con",f"{input_cont}",\
+                "-lw",f"{lw}"])
     print("IMAGE ADJUSTED")
 
-# check if any region is given
-if regionfile != 'None':
-    try:
-        regf = open(regionfile)
-        reglines = regf.readlines()
-        # Making sure that there are no comments or ds9 features in the beginning of the file
-        ind = len([i for i in reglines[0:10] if 'circle' not in i])
-        reglines = reglines[ind:]
-        if len(reglines) == 1:           # If there is a single region 
-            allimage = False             # do not create an image from the whole area
-        regoverlay = True                # overlay the region in both cases
-    except:
-        print("Region file not found!")
-
-if allimage == True:
-    # call the script to create and overlay image
-    make_img(b_img, r_img, g_img, output_fig, overlay=regoverlay, bins=binning)
-    sys.exit(1)
-else:
-    singleregimage()
 
 def singleregimage():
     '''
@@ -211,14 +197,42 @@ def singleregimage():
     #os.popen(f"makesubimage {bpix_ra_LL} {bpix_dec_LL} {bdx} {bdy} < {b_img} > cutout_{b_img}");
 
     fil = open("temp.sh","w")
-    fil.write(f"makesubimage {rpix_ra_LL} {rpix_dec_LL} {rdx} {rdy} < {r_img} > cutout_{r_img}\n")
-    fil.write(f"makesubimage {gpix_ra_LL} {gpix_dec_LL} {gdx} {gdy} < {g_img} > cutout_{g_img}\n")
-    fil.write(f"makesubimage {bpix_ra_LL} {bpix_dec_LL} {bdx} {bdy} < {b_img} > cutout_{b_img}")
+    cutout_r = r_img.split('.fits')[0]+"_cutout.fits"
+    cutout_g = g_img.split('.fits')[0]+"_cutout.fits"
+    cutout_b = b_img.split('.fits')[0]+"_cutout.fits"
+    fil.write(f"makesubimage {rpix_ra_LL} {rpix_dec_LL} {rdx} {rdy} < {r_img} > {cutout_r}\n")
+    fil.write(f"makesubimage {gpix_ra_LL} {gpix_dec_LL} {gdx} {gdy} < {g_img} > {cutout_g}\n")
+    fil.write(f"makesubimage {bpix_ra_LL} {bpix_dec_LL} {bdx} {bdy} < {b_img} > {cutout_b}")
     fil.close()
     sp.run(["bash","temp.sh"])
     sp.run(["rm","temp.sh"])
     # call the make_img function to create image from the cutout fits.
-    make_img(f'cutout_{b_img}', f'cutout_{r_img}', f'cutout_{g_img}', output_fig, overlay=regoverlay, bins=binning)
+    make_img(f'{cutout_b}', f'{cutout_r}', f'{cutout_g}', output_fig, overlay=regoverlay, bins=binning)
+
+
+# Initially consider to create an image from the all area of the fits. And overlay nothing
+allimage = True ; regoverlay = False
+
+# check if any region is given
+if regionfile != 'None':
+    try:
+        regf = open(regionfile)
+        reglines = regf.readlines()
+        # Making sure that there are no comments or ds9 features in the beginning of the file
+        ind = len([i for i in reglines[0:10] if 'circle' not in i])
+        reglines = reglines[ind:]
+        if len(reglines) == 1:           # If there is a single region 
+            allimage = False             # do not create an image from the whole area
+        regoverlay = True                # overlay the region in both cases
+    except:
+        print("Region file not found!")
+
+if allimage == True:
+    # call the script to create and overlay image
+    make_img(b_img, r_img, g_img, output_fig, overlay=regoverlay, bins=binning)
+    sys.exit(1)
+else:
+    singleregimage()
 
  
 
