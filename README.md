@@ -9,3 +9,4 @@ Default is for optical images, but one can also create x-ray images using x-ray 
 CAVEATS: It uses, makesubimage, stiff and swarp programs. :(
 
 - **It is a work in progress so there might be some issues**
+- currently cannot make single color image. 3 channels are required
