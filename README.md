@@ -23,5 +23,8 @@ call ```python3 x-ray_color.py -h``` to display help. <br>
 Uses <font color='red'> Stiff </font> Program from Astromatic ! <br>
 
 Example output; grey scale tif image and colored image with the given parameters.
-<img src="test.tif">
-<img src="test.png">
+
+<table><tr>
+<td> <img src="testgrey.png" alt="Drawing" style="width: 350px;"/> </td>
+<td> <img src="test.png" alt="Drawing" style="width: 450px;"/> </td>
+</tr></table>
