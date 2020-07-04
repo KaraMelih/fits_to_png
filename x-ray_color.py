@@ -35,8 +35,20 @@ DESCRIPTION:
 Required inputs (-f) image fits file, (-o) output name
 Optional [[-sm smoothing radius], [-cmap colormap], [-ip interpolation method], [-cr crop image axis]]
 
-EXAMPLES: python3 x-ray_color.py -f myimgae.fits -o mycolored_image -camp jet
--         
+EXAMPLES: 
+
+ - python3 x-ray_color.py -f myimgae.fits -o mycolored_image -camp jet
+ o Creates a grey colored stiff image named mycolored_image.tif, colors it with jet color map and saves as mycolored_image.png 
+ 
+ - python3 x-ray_color.py -f myimgae.fits -o mycolored_image -camp jet -br 1.7
+ o Creates the same image, increases brightness
+ 
+ - python3 x-ray_color.py -f myimgae.fits -o mycolored_image -camp jet -br 1.7 -sm 3
+ o Creates the same image, increases brightness, gaussian smooths with a 3 sigma kernel
+ 
+  - python3 x-ray_color.py -f myimgae.fits -o mycolored_image -camp jet -br 1.7 -sm 3 -cr True
+ o Creates the same image, increases brightness, gaussian smooths with a 3 sigma kernel, removes the axis names, labels, ticks. 
+ 
 
 AUTHOR:
 Melih Kara (karamel@astro.uni-bonn)
@@ -56,6 +68,8 @@ parser.add_argument('-sm', '--smooth', nargs=1,
                     required=False,default=['None'], help='Gaussian smoothing eg: sm 3 , default is None')
 parser.add_argument('-cr', '--crop', nargs=1,
                     required=False,default=['False'], help='Crop the axis, labels, etc eg: cr True , default is False')
+parser.add_argument('-br', '--brightness', nargs=1,
+                    required=False, default=1, help='Increase/Decrease brightness \nEX: br 1.6 , default is 1')
 parser.add_argument('-conf', '--conf', nargs=1,
                     required=False,default=['x_ray.conf'], help='')
 
@@ -71,6 +85,7 @@ cmap = args.cmap[0]
 ip = args.interpolation[0]
 sm = args.smooth[0]
 cr = args.crop[0]
+br = float(args.brightness[0])
 
 if '.' in outputname:
     outputname = outputname.split('.')[0]
@@ -91,10 +106,16 @@ if sm != 'None':
     from scipy.ndimage import gaussian_filter
     imarray = gaussian_filter(imarray, sigma=float(sm))
 
+# color the image (i.e. add rgba axis)
+cmap = plt.get_cmap(cmap)
+# print(imarray.shape)
+colored_img = cmap(imarray)
+# print(colored_img.shape)
+    
 #  draw figure
 fig = plt.figure(figsize=(10,10))
 ax = plt.subplot(111, projection=wcs)
-ax.imshow(np.flipud(imarray), interpolation=ip, cmap=cmap)
+ax.imshow(np.flipud(colored_img*br), interpolation=ip)
 
 if cr == 'True':
     plt.tick_params(

@@ -3,7 +3,7 @@
 <VOTABLE version="1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ivoa.net/xml/VOTable/v1.2">
 <DESCRIPTION>produced by STIFF</DESCRIPTION>
 <!-- VOTable description at http://www.ivoa.net/Documents/VOTable/ -->
-<RESOURCE ID="STIFF" name="eros_test.tif">
+<RESOURCE ID="STIFF" name="anothertest2.tif">
  <DESCRIPTION>Data related to STIFF</DESCRIPTION>
  <INFO name="QUERY_STATUS" value="OK" />
  <COOSYS ID="J2000" equinox="J2000" epoch="2000.0" system="ICRS"/>
@@ -16,19 +16,19 @@
   <PARAM name="Soft_Auth" datatype="char" arraysize="*" ucd="meta.bib.author;meta.software" value="Emmanuel Bertin"/>
   <PARAM name="Soft_Ref" datatype="char" arraysize="*" ucd="meta.bib.bibcode;meta.software" value="2002ASPC..281..228B"/>
   <PARAM name="NThreads" datatype="int" ucd="meta.number;meta.software" value="6"/>
-  <PARAM name="Date" datatype="char" arraysize="*" ucd="time.event.end;meta.software" value="2020-06-28"/>
-  <PARAM name="Time" datatype="char" arraysize="*" ucd="time.event.end;meta.software" value="14:52:03"/>
-  <PARAM name="Duration" datatype="float" ucd="time.event;meta.software" value="1" unit="s"/>
+  <PARAM name="Date" datatype="char" arraysize="*" ucd="time.event.end;meta.software" value="2020-07-04"/>
+  <PARAM name="Time" datatype="char" arraysize="*" ucd="time.event.end;meta.software" value="16:15:30"/>
+  <PARAM name="Duration" datatype="float" ucd="time.event;meta.software" value="0" unit="s"/>
   <PARAM name="User" datatype="char" arraysize="*" ucd="meta.curation" value="karamel"/>
   <PARAM name="Host" datatype="char" arraysize="*" ucd="meta.curation" value="aibn1058"/>
   <PARAM name="Path" datatype="char" arraysize="*" ucd="meta.dataset" value="/vol/aibn1058/data1/karamel/Thesis/scripts/Make_3color_img"/>
-  <PARAM name="Image_Name" datatype="char" arraysize="*" ucd="obs.image;meta.fits" value="test/eros_test.tif"/>
+  <PARAM name="Image_Name" datatype="char" arraysize="*" ucd="obs.image;meta.fits" value="anothertest2.tif"/>
   <TABLE ID="Input_Image_Data" name="Input_Image_Data">
    <DESCRIPTION>Data gathered by STIFF for every FITS input image</DESCRIPTION>
    <!-- NChannels may be 0 if an error occurred early in the processing -->
-   <PARAM name="NChannels" datatype="int" ucd="meta.number;meta.dataset" value="2"/>
+   <PARAM name="NChannels" datatype="int" ucd="meta.number;meta.dataset" value="0"/>
    <!-- CurrChannel may differ from NChannels if an error occurred -->
-   <PARAM name="CurrChannel" datatype="int" ucd="meta.number;meta.dataset" value="2"/>
+   <PARAM name="CurrChannel" datatype="int" ucd="meta.number;meta.dataset" value="0"/>
    <FIELD name="Image_Index" datatype="int" ucd="meta.record"/>
    <FIELD name="Image_Name" datatype="char" arraysize="*" ucd="obs.image;meta.fits"/>
    <FIELD name="Image_Ident" datatype="char" arraysize="*" ucd="meta.id;obs"/>
@@ -38,16 +38,8 @@
    <FIELD name="Level_Max" datatype="float" ucd="phot.flux.sb;obs.image;stat.max" unit="adu"/>
    <DATA><TABLEDATA>
     <TR>
-     <TD>1</TD><TD>c945_allobs_es200602_CLCRBGSUB_b1_newGTI_0BG0_size4000.fits</TD><TD>A3391/3395_I</TD>
-     <TD>4000 4000</TD><TD>-0.10525</TD><TD>-0.218968</TD><TD>906.199</TD>
-    </TR>
-    <TR>
-     <TD>2</TD><TD>c945_allobs_es200602_CLCRBGSUB_b1_newGTI_0BG0_size4000.fits</TD><TD>A3391/3395_I</TD>
-     <TD>4000 4000</TD><TD>-0.10525</TD><TD>-0.218968</TD><TD>906.199</TD>
-    </TR>
-    <TR>
-     <TD>3</TD><TD>c945_allobs_es200602_CLCRBGSUB_b1_newGTI_0BG0_size4000.fits</TD><TD>A3391/3395_I</TD>
-     <TD>4000 4000</TD><TD>-0.10525</TD><TD>-0.218968</TD><TD>906.199</TD>
+     <TD>1</TD><TD>testXray_b8.fits</TD><TD>Virgo 1</TD>
+     <TD>1037 1037</TD><TD>0</TD><TD>-7.95427e-07</TD><TD>0.000794631</TD>
     </TR>
    </TABLEDATA></DATA>
   </TABLE>
@@ -57,13 +49,14 @@
    <FIELD name="Time" datatype="char" arraysize="*" ucd="meta;time.event.end"/>
    <FIELD name="Msg" datatype="char" arraysize="*" ucd="meta"/>
    <DATA><TABLEDATA>
+    <TR><TD>2020-07-04</TD><TD>16:15:30</TD><TD>{conf} not found, using internal defaults</TD></TR>
    </TABLEDATA></DATA>
   </TABLE>
   <RESOURCE ID="Config" name="Config">
    <DESCRIPTION>STIFF configuration</DESCRIPTION>
-   <PARAM name="Command_Line" datatype="char" arraysize="*" ucd="obs.param" value="stiff ../../angie/c945_allobs_es200602_CLCRBGSUB_b1_newGTI_0BG0_size4000.fits ../../angie/c945_allobs_es200602_CLCRBGSUB_b1_newGTI_0BG0_size4000.fits ../../angie/c945_allobs_es200602_CLCRBGSUB_b1_newGTI_0BG0_size4000.fits -c xray.conf -BINNING 1 -OUTFILE_NAME test/eros_test.tif"/>
-   <PARAM name="Prefs_Name" datatype="char" arraysize="*" ucd="obs.param;meta.file" value="xray.conf"/>
-   <PARAM name="OutFile_Name" datatype="char" arraysize="*" ucd="meta.dataset;meta.file" value="test/eros_test.tif"/>
+   <PARAM name="Command_Line" datatype="char" arraysize="*" ucd="obs.param" value="stiff test/testXray_b8.fits -c {conf} -OUTFILE_NAME anothertest2.tif"/>
+   <PARAM name="Prefs_Name" datatype="char" arraysize="*" ucd="obs.param;meta.file" value="{conf}"/>
+   <PARAM name="OutFile_Name" datatype="char" arraysize="*" ucd="meta.dataset;meta.file" value="anothertest2.tif"/>
    <PARAM name="Image_Type" datatype="char" arraysize="*" ucd="meta.code;meta.file" value="AUTO"/>
    <PARAM name="Bits_Per_Channel" datatype="int" ucd="meta.number" value="8"/>
    <PARAM name="BigTIFF_Type" datatype="char" arraysize="*" ucd="meta.code;meta.file" value="AUTO"/>
@@ -73,12 +66,12 @@
    <PARAM name="Pyramid_MinSize" datatype="int" arraysize="1" ucd="meta.number" value="256"/>
    <PARAM name="Binning" datatype="int" arraysize="1" ucd="meta.number" value="1"/>
    <PARAM name="Flip_Type" datatype="char" arraysize="*" ucd="meta.code;pos" value="NONE"/>
-   <PARAM name="Sky_Type" datatype="char" arraysize="*" ucd="meta.code;instr.skyLevel" value="AUTO,AUTO,AUTO"/>
-   <PARAM name="Sky_Level" unit="adu" datatype="double" arraysize="3" ucd="instr.skyLevel;stat.median;obs.param" value="0 0 0"/>
-   <PARAM name="Min_Type" datatype="char" arraysize="*" ucd="meta.code;stat.min" value="QUANTILE,QUANTILE,QUANTILE"/>
-   <PARAM name="Min_Level" unit="adu" datatype="double" arraysize="3" ucd="phot.flux.sb;stat.min;obs.param" value="0.001 0.001 0.001"/>
-   <PARAM name="Max_Type" datatype="char" arraysize="*" ucd="meta.code;stat.max" value="QUANTILE,QUANTILE,QUANTILE"/>
-   <PARAM name="Max_Level" unit="adu" datatype="double" arraysize="3" ucd="phot.flux.sb;stat.max;obs.param" value="1.5 1.5 1.5"/>
+   <PARAM name="Sky_Type" datatype="char" arraysize="*" ucd="meta.code;instr.skyLevel" value="AUTO"/>
+   <PARAM name="Sky_Level" unit="adu" datatype="double" arraysize="1" ucd="instr.skyLevel;stat.median;obs.param" value="0"/>
+   <PARAM name="Min_Type" datatype="char" arraysize="*" ucd="meta.code;stat.min" value="GREYLEVEL"/>
+   <PARAM name="Min_Level" unit="adu" datatype="double" arraysize="1" ucd="phot.flux.sb;stat.min;obs.param" value="0.001"/>
+   <PARAM name="Max_Type" datatype="char" arraysize="*" ucd="meta.code;stat.max" value="QUANTILE"/>
+   <PARAM name="Max_Level" unit="adu" datatype="double" arraysize="1" ucd="phot.flux.sb;stat.max;obs.param" value="0.999"/>
    <PARAM name="Satur_Level" unit="adu" datatype="double" arraysize="1" ucd="instr.saturation;obs.param" value="40000"/>
    <PARAM name="Gamma" datatype="double" ucd="arith.factor" value="2.2"/>
    <PARAM name="Gamma_Fac" datatype="double" ucd="arith.factor" value="1"/>
