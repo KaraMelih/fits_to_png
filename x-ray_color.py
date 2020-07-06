@@ -69,7 +69,7 @@ parser.add_argument('-sm', '--smooth', nargs=1,
 parser.add_argument('-cr', '--crop', nargs=1,
                     required=False,default=['False'], help='Crop the axis, labels, etc eg: cr True , default is False')
 parser.add_argument('-br', '--brightness', nargs=1,
-                    required=False, default=1, help='Increase/Decrease brightness \nEX: br 1.6 , default is 1')
+                    required=False, default=[1], help='Increase/Decrease brightness \nEX: br 1.6 , default is 1')
 parser.add_argument('-conf', '--conf', nargs=1,
                     required=False,default=['x_ray.conf'], help='')
 
@@ -95,7 +95,7 @@ hdu = FITS.open(fits)
 wcs = WCS(hdu[0].header)
 
 try:
-    sp.call(["stiff", f"{fits}","-c","{conf}","-OUTFILE_NAME", f"{outputname}.tif"]);
+    sp.call(["stiff", f"{fits}","-OUTFILE_NAME", f"{outputname}.tif","-c",f"{conf}"]);
 except:
     print('Configuration file not found. Using default.')
     sp.call(["stiff", f"{fits}","-OUTFILE_NAME", f"{outputname}.tif"]);
